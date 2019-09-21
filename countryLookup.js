@@ -1,0 +1,17 @@
+module.exports = {
+    argentina: 'ar',
+    australia: 'au',
+    brazil: 'br',
+    canada: 'ca',
+    china: 'cn',
+    germany: 'de',
+    greece: 'gr',
+    india: 'in',
+    israel: 'is',
+    norway: 'no',
+    southKorea: 'kr',
+    switzerland: 'ch',
+    thailand: 'th',
+    uk: 'gb',
+    us: 'us',
+};

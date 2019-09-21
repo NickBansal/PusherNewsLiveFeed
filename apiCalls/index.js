@@ -1,7 +1,6 @@
 const axios = require('axios');
-const url = require('../newsApi');
 
-const getApiAndEmit = async (socket) => {
+const getApiAndEmit = async (socket, url) => {
     try {
         const res = await axios.get(url);
         socket.emit('FromAPI', res.data.articles);
