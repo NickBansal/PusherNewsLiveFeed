@@ -3,7 +3,8 @@ const http = require('http');
 const cors = require('cors');
 const socketIo = require('socket.io');
 const { getApiAndEmit } = require('./apiCalls');
-const { ukURL, usURL } = require('./newsApi');
+const url = require('./newsApi');
+const lookup = require('./countryLookup');
 
 const port = process.env.PORT || 8080;
 const index = require('./routes');
@@ -22,23 +23,24 @@ io.on('connection', (socket) => {
     console.log('New client connected');
     clearInterval(interval);
 
-    getApiAndEmit(socket, ukURL);
+    getApiAndEmit(socket, url('gb'));
 
     interval = setInterval(
-        () => getApiAndEmit(socket, ukURL),
+        () => getApiAndEmit(socket, url('gb')),
         5000,
     );
 
     socket.on('sendCountry', (response) => {
         clearInterval(interval);
 
-        getApiAndEmit(socket, usURL);
+        const countrySelector = lookup[response];
+
+        getApiAndEmit(socket, url(countrySelector));
 
         interval = setInterval(
-            () => getApiAndEmit(socket, usURL),
+            () => getApiAndEmit(socket, url(countrySelector)),
             5000,
         );
-        // io.emit('fromAPI', response);
     });
 
     socket.on('disconnect', () => console.log('Client disconnected'));

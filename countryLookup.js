@@ -9,9 +9,9 @@ module.exports = {
     india: 'in',
     israel: 'is',
     norway: 'no',
-    southKorea: 'kr',
+    southkorea: 'kr',
     switzerland: 'ch',
     thailand: 'th',
-    uk: 'gb',
-    us: 'us',
+    unitedkingdom: 'gb',
+    unitedstatesofamerica: 'us',
 };
