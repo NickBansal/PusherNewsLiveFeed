@@ -20,17 +20,24 @@ let interval;
 
 io.on('connection', (socket) => {
     console.log('New client connected');
-    getApiAndEmit(socket, url);
     clearInterval(interval);
+
+    getApiAndEmit(socket, url);
+
     interval = setInterval(
         () => getApiAndEmit(socket, url),
         5000,
     );
 
+    socket.on('sendCountry', (response, callback) => {
+        io.emit('fromAPI', response);
+        callback(response);
+    });
+
     socket.on('disconnect', () => console.log('Client disconnected'));
 });
 
-io.listen(port, () => {
+server.listen(port, () => {
     console.log(`Listening on server ${port} - http://localhost:${port}/`);
 });
 
