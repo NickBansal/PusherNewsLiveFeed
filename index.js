@@ -17,9 +17,9 @@ app.use(cors());
 const server = http.createServer(app);
 const io = socketIo(server);
 
-let interval;
 
 io.on('connection', (socket) => {
+    let interval;
     console.log('New client connected');
     clearInterval(interval);
 
@@ -27,16 +27,14 @@ io.on('connection', (socket) => {
 
     interval = setInterval(
         () => getApiAndEmit(socket, url('gb')),
-        5000,
+        2000,
     );
 
     socket.on('sendCountry', (response) => {
         clearInterval(interval);
-
         const countrySelector = lookup[response];
 
         getApiAndEmit(socket, url(countrySelector));
-
         interval = setInterval(
             () => getApiAndEmit(socket, url(countrySelector)),
             5000,
