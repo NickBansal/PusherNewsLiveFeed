@@ -2,9 +2,15 @@ const express = require('express');
 const http = require('http');
 const cors = require('cors');
 const socketIo = require('socket.io');
-const { getApiAndEmit } = require('./apiCalls');
-const url = require('./newsApi');
-const lookup = require('./countryLookup');
+const { getApiAndEmit, url, lookup } = require('./liveNewsFeed');
+const {
+    handleRegister,
+    handleJoin,
+    handleLeave,
+    handleMessage,
+    handleGetChatrooms,
+    handleGetAvailableUsers,
+} = require('./liveChatApp');
 
 const port = process.env.PORT || 8080;
 const index = require('./routes');
@@ -27,8 +33,20 @@ io.on('connection', (socket) => {
 
     interval = setInterval(
         () => getApiAndEmit(socket, url('gb')),
-        2000,
+        5000,
     );
+
+    socket.on('register', handleRegister);
+
+    socket.on('join', handleJoin);
+
+    socket.on('leave', handleLeave);
+
+    socket.on('message', handleMessage);
+
+    socket.on('chatrooms', handleGetChatrooms);
+
+    socket.on('availableUsers', handleGetAvailableUsers);
 
     socket.on('sendCountry', (response) => {
         clearInterval(interval);

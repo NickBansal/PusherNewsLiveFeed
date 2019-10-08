@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --testMatch=\"**/test.js\"",
     "dev": "nodemon index.js"
   },
   "keywords": [],
@@ -15,11 +15,13 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "nodemon": "^1.19.2",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.3.0",
+    "socket.io-client": "^2.3.0"
   },
   "devDependencies": {
     "eslint": "^6.4.0",
     "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-plugin-import": "^2.18.2"
+    "eslint-plugin-import": "^2.18.2",
+    "jest": "^24.9.0"
   }
 }
