@@ -1,10 +1,14 @@
-const handleRegister = () => {};
+const handleRegister = (name) => {
+    console.log(name);
+};
 
 const handleJoin = () => {};
 
 const handleLeave = () => {};
 
-const handleMessage = () => {};
+const handleMessage = (message) => {
+    console.log(message);
+};
 
 const handleGetChatrooms = () => {};
 
