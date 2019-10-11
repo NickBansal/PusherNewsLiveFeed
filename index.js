@@ -45,6 +45,7 @@ io.on('connection', (socket) => {
             time: undefined,
             username,
             room,
+            alert: true,
         });
 
         socket.broadcast.to(room).emit('message', {
@@ -52,6 +53,7 @@ io.on('connection', (socket) => {
             time: undefined,
             username,
             room,
+            alert: true,
         });
 
         socket.on('sendMessage', (message) => {
@@ -60,6 +62,14 @@ io.on('connection', (socket) => {
                 time: moment().format('HH:mm a'),
                 username,
                 room,
+            });
+        });
+
+        socket.on('sendLocation', ({ location, name }) => {
+            io.to(room).emit('message', {
+                message: location,
+                time: moment().format('HH:mm a'),
+                username: name,
             });
         });
     });
@@ -79,7 +89,11 @@ io.on('connection', (socket) => {
         const user = removeUser(socket.id);
 
         if (user) {
-            io.to(user.room).emit('message', { message: `${user.username} has left the room...`, time: undefined });
+            io.to(user.room).emit('message', {
+                message: `${user.username} has left the room...`,
+                time: undefined,
+                alert: true,
+            });
         }
         console.log('Client disconnected');
     });
