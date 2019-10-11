@@ -8,8 +8,6 @@ const { getApiAndEmit, url, lookup } = require('./liveNewsFeed');
 const {
     addUser,
     removeUser,
-    getUser,
-    getUsersInRoom,
 } = require('./liveChatApp');
 
 const port = process.env.PORT || 8080;
