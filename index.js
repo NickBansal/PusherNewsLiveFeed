@@ -19,10 +19,6 @@ app.use(cors());
 io.on('connection', (socket) => {
     console.log('New client connected');
 
-    socket.emit('message', { message: 'Welcome!', time: undefined });
-
-    socket.broadcast.emit('message', { message: 'A new user has joined...', time: undefined });
-
     let interval;
     clearInterval(interval);
 
@@ -41,8 +37,22 @@ io.on('connection', (socket) => {
         });
     });
 
-    socket.on('joinRoom', (values) => {
-        console.log(values);
+    socket.on('joinRoom', ({ username, room }) => {
+        socket.join(room);
+
+        socket.emit('message', {
+            message: 'Welcome!',
+            time: undefined,
+            username,
+            room,
+        });
+
+        socket.broadcast.to(room).emit('message', {
+            message: `${username} has now joined...`,
+            time: undefined,
+            username,
+            room,
+        });
     });
 
     // socket.on('sendCountry', (response) => {
