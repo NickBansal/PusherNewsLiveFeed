@@ -1,24 +1,29 @@
-const handleRegister = (name) => {
-    console.log(name);
+let users = [];
+
+// addUser
+const addUser = ({ id, username, room }) => {
+    const user = { id, username, room };
+    users.push(user);
+    return user;
 };
 
-const handleJoin = () => {};
-
-const handleLeave = () => {};
-
-const handleMessage = (message) => {
-    console.log(message);
+// removeUser
+const removeUser = (id) => {
+    const user = users.find((person) => person.id === id);
+    users = users.filter((person) => person.id !== id);
+    return user;
 };
 
-const handleGetChatrooms = () => {};
+// getUser
+const getUser = (id) => users.find((user) => user.id === id);
 
-const handleGetAvailableUsers = () => {};
+
+// getUsersInRoom
+const getUsersInRoom = (room) => users.filter((user) => user.room === room);
 
 module.exports = {
-    handleRegister,
-    handleJoin,
-    handleLeave,
-    handleMessage,
-    handleGetChatrooms,
-    handleGetAvailableUsers,
+    addUser,
+    removeUser,
+    getUser,
+    getUsersInRoom,
 };

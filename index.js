@@ -10,7 +10,7 @@ const {
     removeUser,
     getUser,
     getUsersInRoom,
-} = require('./liveChatApp/users');
+} = require('./liveChatApp');
 
 const port = process.env.PORT || 8080;
 const index = require('./routes');
@@ -35,13 +35,6 @@ io.on('connection', (socket) => {
     // );
 
 
-    socket.on('sendMessage', (message) => {
-        io.emit('message', {
-            message,
-            time: moment().format('HH:mm a'),
-        });
-    });
-
     socket.on('joinRoom', (values) => {
         const { username, room } = addUser({ id: socket.id, ...values });
 
@@ -60,6 +53,15 @@ io.on('connection', (socket) => {
             username,
             room,
         });
+
+        socket.on('sendMessage', (message) => {
+            io.to(room).emit('message', {
+                message,
+                time: moment().format('HH:mm a'),
+                username,
+                room,
+            });
+        });
     });
 
     // socket.on('sendCountry', (response) => {
@@ -75,9 +77,9 @@ io.on('connection', (socket) => {
 
     socket.on('disconnect', () => {
         const user = removeUser(socket.id);
-        console.log(user);
+
         if (user) {
-            io.to(user.room).emit('message', { message: `${user.username} has left the room`, time: undefined });
+            io.to(user.room).emit('message', { message: `${user.username} has left the room...`, time: undefined });
         }
         console.log('Client disconnected');
     });
