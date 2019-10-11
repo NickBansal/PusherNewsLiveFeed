@@ -5,6 +5,12 @@ const socketIo = require('socket.io');
 const moment = require('moment');
 
 // const { getApiAndEmit, url, lookup } = require('./liveNewsFeed');
+const {
+    addUser,
+    removeUser,
+    getUser,
+    getUsersInRoom,
+} = require('./liveChatApp/users');
 
 const port = process.env.PORT || 8080;
 const index = require('./routes');
@@ -18,7 +24,6 @@ app.use(cors());
 
 io.on('connection', (socket) => {
     console.log('New client connected');
-
     let interval;
     clearInterval(interval);
 
@@ -37,7 +42,9 @@ io.on('connection', (socket) => {
         });
     });
 
-    socket.on('joinRoom', ({ username, room }) => {
+    socket.on('joinRoom', (values) => {
+        const { username, room } = addUser({ id: socket.id, ...values });
+
         socket.join(room);
 
         socket.emit('message', {
@@ -67,7 +74,11 @@ io.on('connection', (socket) => {
     // });
 
     socket.on('disconnect', () => {
-        io.emit('message', { message: 'A user has left', time: undefined });
+        const user = removeUser(socket.id);
+        console.log(user);
+        if (user) {
+            io.to(user.room).emit('message', { message: `${user.username} has left the room`, time: undefined });
+        }
         console.log('Client disconnected');
     });
 });
