@@ -4,7 +4,7 @@ const cors = require('cors');
 const socketIo = require('socket.io');
 const moment = require('moment');
 
-// const { getApiAndEmit, url, lookup } = require('./liveNewsFeed');
+const { getApiAndEmit, url, lookup } = require('./liveNewsFeed');
 const {
     addUser,
     removeUser,
@@ -27,18 +27,20 @@ io.on('connection', (socket) => {
     let interval;
     clearInterval(interval);
 
-    // getApiAndEmit(socket, url('gb'));
+    getApiAndEmit(socket, url('gb'));
 
-    // interval = setInterval(
-    //     () => getApiAndEmit(socket, url('gb')),
-    //     5000,
-    // );
+    interval = setInterval(
+        () => getApiAndEmit(socket, url('gb')),
+        5000,
+    );
 
 
     socket.on('joinRoom', (values) => {
         const { username, room } = addUser({ id: socket.id, ...values });
 
         socket.join(room);
+
+        socket.emit('user', ({ username, room }));
 
         socket.emit('message', {
             message: 'Welcome!',
@@ -74,16 +76,16 @@ io.on('connection', (socket) => {
         });
     });
 
-    // socket.on('sendCountry', (response) => {
-    //     clearInterval(interval);
-    //     const countrySelector = lookup[response];
+    socket.on('sendCountry', (response) => {
+        clearInterval(interval);
+        const countrySelector = lookup[response];
 
-    //     getApiAndEmit(socket, url(countrySelector));
-    //     interval = setInterval(
-    //         () => getApiAndEmit(socket, url(countrySelector)),
-    //         5000,
-    //     );
-    // });
+        getApiAndEmit(socket, url(countrySelector));
+        interval = setInterval(
+            () => getApiAndEmit(socket, url(countrySelector)),
+            5000,
+        );
+    });
 
     socket.on('disconnect', () => {
         const user = removeUser(socket.id);
