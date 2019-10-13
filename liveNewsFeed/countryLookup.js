@@ -20,5 +20,5 @@ module.exports = {
     thailand: 'th',
     unitedarabemirates: 'ae',
     unitedkingdom: 'gb',
-    unitedstatesofamerica: 'us',
+    unitedstatesofamerica: 'us'
 };

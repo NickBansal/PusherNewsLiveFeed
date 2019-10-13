@@ -17,7 +17,6 @@ module.exports = {
         "no-console": 0,
         "indent": ["error", 4],
         "no-unused-expressions": 0,
-        "no-param-reassign": 0,
-        "comma-dangle": 0
+        "no-param-reassign": 0
     }
 };
